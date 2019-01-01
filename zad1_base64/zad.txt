@@ -1,0 +1,22 @@
+Lab 1:
+Napisaæ aplikacjê umo¿liwiaj¹c¹ zakodowanie pliku do postaci base64 oraz ponownego jego
+odkodowania.
+Cele aplikacji koduj¹cej:
+* powinna pozwoliæ na wczytanie dowolnego pliku (.txt, .bmp i .zip) i zapisanie jego kodu
+Base64 (jako string) w pliku wynikowym, np. obraz.bmp -> obraz.b64
+* nie powinna ograniczaæ rozmiaru pliku wejœciowego
+* ca³a logika Base64 powinna zostaæ napisana samodzielnie (zakaz korzystania z gotowych
+bibliotek)
+* powinna obs³ugiwaæ padding, je¿eli d³ugoœæ ostatniego kawa³ka informacji wejœciowej nie
+da siê podzieliæ równo na 3 bajty
+Cele aplikacji dekoduj¹cej:
+* powinna mieæ mo¿liwoœæ wyboru pliku zakodowanego
+* rezultatem powinien byæ plik, który wczeœniej zosta³ zakodowany
+* ca³a logika Base64 powinna zostaæ napisana samodzielnie (zakaz korzystania z gotowych
+bibliotek)
+Aplikacja mo¿e byæ okienkowa lub konsolowa. W przypadku wykorzystania bardzo egzotycznych
+jêzyków programowania, nale¿y wczeœniej wyt³umaczyæ powód takiego wyboru. Przed
+prezentacj¹ swojej aplikacji warto sprawdziæ, czy otrzymany rezultat jest identyczny z
+rezultatem uzyskanym na tym samym pliku przez inne sprawdzone narzêdzia.
+Logika kodowania i odkodowania nie musi byæ rozbita na 2 osobne aplikacje. Istotne jest,
+aby podzieliæ oba zadania - mog¹ to byæ 2 funkcje w ramach jednej aplikacji.
