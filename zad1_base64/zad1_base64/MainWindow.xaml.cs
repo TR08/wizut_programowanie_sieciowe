@@ -22,10 +22,9 @@ namespace zad1_base64
     /// </summary>
     public partial class MainWindow : Window
     {
-        private char[] _b64;
+        private string _saveToPath;
         public MainWindow()
         {
-            _b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".ToCharArray();
             InitializeComponent();
         }
 
@@ -41,7 +40,41 @@ namespace zad1_base64
             {
                 string filename = dlgWindow.FileName;
                 fileNameTextBox.Text = filename;
+
+                int idx = filename.LastIndexOf('\\');
+                _saveToPath = filename.Substring(0, idx + 1);
+                SetNewFileNameAndExt(1);
+
+                binaryTxtBox.Text = "";
+                base64TxtBox.Text = "";
+                newFileName.IsEnabled = true;
+                newFileExt.IsEnabled = true;
                 startBtn.IsEnabled = true;
+            }
+        }
+
+        private void SetNewFileNameAndExt(int mode=0)
+        {
+            int idx = fileNameTextBox.Text.LastIndexOf('\\');
+            string curFileName = fileNameTextBox.Text.Substring(idx + 1);
+            idx = curFileName.LastIndexOf('.');
+            if (curFileName.Substring(idx + 1) != "b64")
+            {
+                newFileExt.Text = "b64";
+                newFileName.Text = curFileName;
+                encodeRadio.IsChecked = true;
+                decodeRadio.IsEnabled = false;
+                encodeRadio.IsEnabled = true;
+            }
+            else
+            {
+                string temp = curFileName.Substring(0, idx);
+                idx = temp.LastIndexOf('.');
+                newFileExt.Text = temp.Substring(idx + 1);
+                newFileName.Text = temp.Substring(0, idx);
+                decodeRadio.IsChecked = true;
+                decodeRadio.IsEnabled = true;
+                encodeRadio.IsEnabled = false;
             }
         }
 
@@ -55,10 +88,14 @@ namespace zad1_base64
             }
             else
             {
+                string saveToPath = _saveToPath+newFileName.Text+"."+newFileExt.Text;
                 string base64Data = GetBase64Data(fileNameTextBox.Text);
                 base64TxtBox.Text = base64Data;
-                string decodedData = DecodeBase64(base64Data);
-                binaryTxtBox.Text = decodedData;
+                byte[] decodedData = DecodeBase64(base64Data);
+                binaryTxtBox.Text = "";
+                for (int i = 0; i < decodedData.Length; ++i)
+                    binaryTxtBox.Text += decodedData[i].ToString("x") + " ";
+                File.WriteAllBytes(saveToPath, decodedData);
             }
             startBtn.IsEnabled = false;
         }
@@ -80,6 +117,7 @@ namespace zad1_base64
 
         private string EncodeBase64(string binaryData)
         {
+            char[] b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".ToCharArray();
             //encode full 3-byte packs
             string base64 = "";
             string tmp = "";
@@ -89,7 +127,7 @@ namespace zad1_base64
                 tmp += binaryData[i];
                 if ((i + 1) % 6 == 0)
                 {
-                    base64 += _b64[Convert.ToInt32(tmp, 2)];
+                    base64 += b64[Convert.ToInt32(tmp, 2)];
                     tmp = "";
                     ++sixPacks;
                 }
@@ -97,7 +135,7 @@ namespace zad1_base64
             //check if there are leftovers and encode them
             if (tmp != "")
             {
-                base64 += _b64[Convert.ToInt32(tmp.PadRight(6, '0'), 2)];
+                base64 += b64[Convert.ToInt32(tmp.PadRight(6, '0'), 2)];
                 ++sixPacks;
             }
             //complete last pack with '=' for lacking 6-bit parts
@@ -114,10 +152,47 @@ namespace zad1_base64
             return base64;
         }
 
-        private string DecodeBase64(string base64Data)
+        private byte[] DecodeBase64(string base64Data)
         {
+            Dictionary<int, int> b64 = new Dictionary<int, int>();
+            for (int i = 48; i < 58; ++i)
+                b64.Add(i, i + 4); //0-9
+            for (int i = 65; i < 91; ++i)
+                b64.Add(i, i - 65); //A-Z
+            for (int i = 97; i < 123; ++i)
+                b64.Add(i, i - 71); //a-z
+            b64.Add(43, 62); //'+'
+            b64.Add(47, 63); //'/'
 
-            return "";
+            //prepare array for bytes
+            int count = base64Data.Length * 3 / 4;
+            if (base64Data[base64Data.Length - 1] == '=')
+            {
+                --count;
+                if (base64Data[base64Data.Length - 2] == '=') --count;
+            }
+            byte[] bytes = new byte[count];
+            int k = 0;
+
+            //decode
+            for (int i=0; i<base64Data.Length; i += 4)
+            {
+                if (base64Data[i + 3] != '=')
+                {
+                    bytes[k++] = (byte)((b64[base64Data[i]] << 2) | (b64[base64Data[i + 1]] >> 4));
+                    bytes[k++] = (byte)((b64[base64Data[i + 1]] << 4) | (b64[base64Data[i + 2]] >> 2));
+                    bytes[k++] = (byte)((b64[base64Data[i + 2]] << 6) | b64[base64Data[i + 3]]);
+                }
+                else
+                {
+                    bytes[k++] = (byte)((b64[base64Data[i]] << 2) | (b64[base64Data[i + 1]] >> 4));
+                    if (base64Data[i + 2] != '=')
+                    {
+                        bytes[k++] = (byte)((b64[base64Data[i + 1]] << 4) | (b64[base64Data[i + 2]] >> 2));
+                    }
+                }
+            }
+            return bytes;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
