@@ -80,76 +80,86 @@ namespace zad1_base64
 
         private void start_Click(object sender, RoutedEventArgs e)
         {
+            string saveToPath = _saveToPath + newFileName.Text + "." + newFileExt.Text;
             if (encodeRadio.IsChecked==true)
             {
-                string binData = GetBinaryData(fileNameTextBox.Text);
+                byte[] binData = GetBinaryData(fileNameTextBox.Text);
                 string encodedData = EncodeBase64(binData);
-                base64TxtBox.Text = encodedData;
+                File.WriteAllText(saveToPath, encodedData);
+                if (binData.Length < 5001) DisplayData(binData, encodedData);
+                else DisplayData("File is to big.", "Displaying data would cause performance issue.");
             }
             else
             {
-                string saveToPath = _saveToPath+newFileName.Text+"."+newFileExt.Text;
                 string base64Data = GetBase64Data(fileNameTextBox.Text);
-                base64TxtBox.Text = base64Data;
                 byte[] decodedData = DecodeBase64(base64Data);
-                binaryTxtBox.Text = "";
-                for (int i = 0; i < decodedData.Length; ++i)
-                    binaryTxtBox.Text += decodedData[i].ToString("x") + " ";
                 File.WriteAllBytes(saveToPath, decodedData);
+                if (decodedData.Length < 5001) DisplayData(decodedData, base64Data);
+                else DisplayData("File is to big.", "Displaying data would cause performance issue.");
             }
+
             startBtn.IsEnabled = false;
         }
 
-        private string GetBinaryData(string path)
+        private void DisplayData(byte[] byteData, string base64Data)
         {
-            //read file as bytes and return string of bits
-            byte[] bFile = File.ReadAllBytes(path);
+            base64TxtBox.Text = base64Data;
             binaryTxtBox.Text = "";
-            string binData = "";
-            for (int i = 0; i < bFile.Length; ++i)
-            {
-                string tmp = Convert.ToString(bFile[i], 2).PadLeft(8,'0');
-                binaryTxtBox.Text += tmp + " ";
-                binData += tmp;
-            }
-            return binData;
+            for (int i = 0; i < byteData.Length; ++i)
+                binaryTxtBox.Text += byteData[i].ToString("x") + " ";
         }
 
-        private string EncodeBase64(string binaryData)
+        private void DisplayData(string byteData, string base64Data)
+        {
+            base64TxtBox.Text = base64Data;
+            binaryTxtBox.Text = byteData;
+        }
+
+        private byte[] GetBinaryData(string path)
+        {
+            return File.ReadAllBytes(path);
+        }
+
+        private string EncodeBase64(byte[] binaryData)
         {
             char[] b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".ToCharArray();
             //encode full 3-byte packs
-            string base64 = "";
-            string tmp = "";
-            int sixPacks = 0;
-            for (int i = 0; i < binaryData.Length; ++i)
+            int leftovers = binaryData.Length % 3;
+            int count = binaryData.Length - (leftovers);
+            char[] base64 = new char[(binaryData.Length+(3-leftovers))*4/3];
+            int k = 0;
+
+            for (int i = 0; i < count; i += 3)
             {
-                tmp += binaryData[i];
-                if ((i + 1) % 6 == 0)
+                base64[k++] = b64[(binaryData[i] >> 2)];
+                base64[k++] = b64[((byte)((binaryData[i] << 6) | (binaryData[i + 1] >> 2)) >> 2)];
+                base64[k++] = b64[((byte)((binaryData[i + 1] << 4) | (binaryData[i + 2] >> 4)) >> 2)];
+                base64[k++] = b64[(binaryData[i + 2] & (byte)63)];
+            }
+            //check if there are leftovers, encode them and add padding
+            if (leftovers!=0)
+            {
+                base64[k++] = b64[(binaryData[count] >> 2)];
+                if (leftovers == 2)
                 {
-                    base64 += b64[Convert.ToInt32(tmp, 2)];
-                    tmp = "";
-                    ++sixPacks;
+                    base64[k++] = b64[((byte)((binaryData[count] << 6) | (binaryData[count + 1] >> 2)) >> 2)];
+                    base64[k++] = b64[((byte)(binaryData[count + 1] << 2) & 60)];
+                    base64[k++] = '=';
+                }
+                else
+                {
+                    base64[k++] = b64[((byte)(binaryData[count] << 6) & 63)];
+                    base64[k++] = '=';
+                    base64[k++] = '=';
                 }
             }
-            //check if there are leftovers and encode them
-            if (tmp != "")
-            {
-                base64 += b64[Convert.ToInt32(tmp.PadRight(6, '0'), 2)];
-                ++sixPacks;
-            }
-            //complete last pack with '=' for lacking 6-bit parts
-            if (sixPacks % 4 != 0)
-                for (int i = 0; i < (4 - (sixPacks % 4)); ++i)
-                    base64 += "=";
             //return encoded base64 string
-            return base64;
+            return new string(base64);
         }
 
         private string GetBase64Data(string path)
         {
-            string base64 = File.ReadAllText(path);
-            return base64;
+            return File.ReadAllText(path);
         }
 
         private byte[] DecodeBase64(string base64Data)

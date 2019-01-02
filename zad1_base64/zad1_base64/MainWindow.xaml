@@ -11,7 +11,7 @@
                  VerticalAlignment="Top" Width="393" IsReadOnly="True"/>
         <Button Content="Browse" Height="32" HorizontalAlignment="Left" Margin="405,10,0,0"
                 Name="browseBtn" VerticalAlignment="Top" Width="88" Click="browse_Click" />
-        <TextBlock Margin="400,40,10,490">
+        <TextBlock Margin="400,40,10,0" VerticalAlignment="Top">
             <InlineUIContainer>
                 <Label Content="Compare results:" Width="107" Height="25" Margin="-4,0,0,-10"/>
             </InlineUIContainer><Run/><LineBreak/>
@@ -19,14 +19,10 @@
             <Hyperlink NavigateUri="https://cryptii.com/pipes/base64-to-binary"><Run Text="- file decoder"/></Hyperlink><LineBreak/>
             <Hyperlink NavigateUri="https://cryptii.com/pipes/base64-to-binary"><Run Text="- text en-/decoder"/></Hyperlink>
         </TextBlock>
-        <TextBox Name="binaryTxtBox" HorizontalAlignment="Left" Margin="10,145,10,0" VerticalAlignment="Top" TextWrapping="Wrap" IsReadOnly="True" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto" MaxWidth="246"/>
-        <TextBox Name="base64TxtBox" HorizontalAlignment="Left" Margin="260,145,10,0" VerticalAlignment="Top" TextWrapping="Wrap" IsReadOnly="True" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-        <Label Content="Binary:" HorizontalAlignment="Left" Margin="6,115,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-        <Label Content="Base64:" HorizontalAlignment="Left" Margin="256,115,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <RadioButton x:Name="encodeRadio" Content="Encode Base64" HorizontalAlignment="Left" Margin="6,58,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.34,0.028" GroupName="codeToWhat" IsEnabled="False"/>
         <RadioButton x:Name="decodeRadio" Content="Decode Base64" HorizontalAlignment="Left" Margin="118,58,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.34,0.028" GroupName="codeToWhat" IsEnabled="False"/>
         <Button x:Name="startBtn" Content="START" HorizontalAlignment="Left" Margin="234,56,0,0" VerticalAlignment="Top" Width="75" Click="start_Click" IsEnabled="False"/>
-        <TextBlock Margin="0,85,0,490">
+        <TextBlock Margin="0,85,0,0" Height="30" VerticalAlignment="Top">
             <InlineUIContainer>
                 <Label Content="Save as:" HorizontalAlignment="Left" Margin="6,0,0,0" VerticalAlignment="Top"/>
             </InlineUIContainer>
@@ -40,5 +36,9 @@
                 <TextBox x:Name="newFileExt" HorizontalAlignment="Left" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" IsEnabled="False"/>
             </InlineUIContainer>
         </TextBlock>
+        <TextBox Name="binaryTxtBox" HorizontalAlignment="Left" Margin="10,145,10,0" VerticalAlignment="Top" TextWrapping="Wrap" IsReadOnly="True" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto" MaxWidth="246"/>
+        <TextBox Name="base64TxtBox" HorizontalAlignment="Left" Margin="260,145,10,0" VerticalAlignment="Top" TextWrapping="Wrap" IsReadOnly="True" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        <Label Content="Bytes (hex):" HorizontalAlignment="Left" Margin="6,115,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Base64:" HorizontalAlignment="Left" Margin="256,115,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
     </Grid>
 </Window>

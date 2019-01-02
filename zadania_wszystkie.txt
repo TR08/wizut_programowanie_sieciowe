@@ -1,0 +1,154 @@
+ Lab 1:
+Napisać aplikację umożliwiającą zakodowanie pliku do postaci base64 oraz ponownego jego
+odkodowania.
+Cele aplikacji kodującej:
+* powinna pozwolić na wczytanie dowolnego pliku (.txt, .bmp i .zip) i zapisanie jego kodu
+Base64 (jako string) w pliku wynikowym, np. obraz.bmp -> obraz.b64
+* nie powinna ograniczać rozmiaru pliku wejściowego
+* cała logika Base64 powinna zostać napisana samodzielnie (zakaz korzystania z gotowych
+bibliotek)
+* powinna obsługiwać padding, jeżeli długość ostatniego kawałka informacji wejściowej nie
+da się podzielić równo na 3 bajty
+Cele aplikacji dekodującej:
+* powinna mieć możliwość wyboru pliku zakodowanego
+* rezultatem powinien być plik, który wcześniej został zakodowany
+* cała logika Base64 powinna zostać napisana samodzielnie (zakaz korzystania z gotowych
+bibliotek)
+Aplikacja może być okienkowa lub konsolowa. W przypadku wykorzystania bardzo egzotycznych
+języków programowania, należy wcześniej wytłumaczyć powód takiego wyboru. Przed
+prezentacją swojej aplikacji warto sprawdzić, czy otrzymany rezultat jest identyczny z
+rezultatem uzyskanym na tym samym pliku przez inne sprawdzone narzędzia.
+Logika kodowania i odkodowania nie musi być rozbita na 2 osobne aplikacje. Istotne jest,
+aby podzielić oba zadania - mogą to być 2 funkcje w ramach jednej aplikacji.
+
+Lab 2:
+Zaimplementować prostego klienta POP3.
+Dopuszczalne jest jedynie wykorzystanie podstawowych klas i metod do obsługi gniazd, nie
+wolno korzystać z klas "opakowujących", wyspecjalizowanych do obsługi POP3.
+Do programu powinien być dołączony plik App.config. Z tego pliku program będzie pobierał
+dane wymagane do działania, czyli:
+- adres serwera
+- nazwę użytkownika
+- hasło
+- port (domyślna wartość dla POP3: port 110)
+- czas [s] co ile sprawdzana ma być poczta
+UWAGA, dygresja - proszę o zachowanie ostrożności i nie wpisywanie do pliku haseł do
+"wrażliwych" maili (prywatnych lub uczelnianego). Warto na potrzeby zadania utworzyć
+specjalnego maila, którego potencjalna strata nie będzie bolesna. Odradzam konto na gmail
+(bywa kłopotliwe podczas niskopoziomowych operacji SMTP/POP3), zamiast tego lepiej
+utworzyć konto na lokalnych portalach: poczta.onet.pl, poczta.wp.pl, poczta.o2.pl.
+Sposób przechowywania danych w pliku konfiguracyjnym jest dowolny
+(XML/plaintext/jakikolwiek inny), ale powinien on pozwalać na łatwą modyfikację danych.
+
+Po uruchomieniu, program powinien:
+* pobrać dane z pliku konfiguracyjnego
+* nawiązać połączenie z serwerem poprzez gniazdo i się uwierzytelnić
+* co X sekund (wartość określona w pliku .config) program poiwnien łączyć się z serwerem i
+sprawdzać, czy pojawiła się nowa wiadomość
+* w przypadku pojawienia się nowej wiadomości (od czasu ostatniego sprawdzenia), program
+powinien to zasygnalizować - pokazać jej tytuł, albo przynajmniej poinformować o nowej
+wiadomości
+* program powinien pozwolić na zakończenie połączenia (np. poprzez wpisanie znaku 'q').
+Program powinien wówczas zamknąć gniazda i poinformować, ile maili łącznie zostało
+odebranych od czasu uruchomienia.
+* program powinien mieć zaimplementowany mechanizm UIDL (Unique Id Listing) w celu
+uniknięcia fałszywego wykrywania każdorazowo tych samych wiadomości.
+Szczegółowy RFC dla POP3: https://www.ietf.org/rfc/rfc1939.txt?number=1939
+Wymagane będą głównie polecenia USER, PASS, UIDL, QUIT
+Proszę o ostrożność w kwestii haseł oraz o pilnowanie, aby przesadnie nie "spamować"
+serwera pocztowego (wysyłanie polecenia LIST co 2 milisekundy może zostać przez serwer
+odebrane jako atak). Rozsądne jest odpytywanie serwera co 5-10 sekund.
+
+Lab 3:
+Napisać (w dowolnym języku) program, który wyśle wiadomość email poprzez SMTP.
+Program powinien:
+- pobrać od użytkownika wszystkie odpowiednie parametry (w dowolny sposób: argumenty
+aplikacji konsolowej, plik konfiguracyjny, wejście "z klawiatury")
+- wysłać wiadomość email o tytule "PS LAB N2 ZIMA 2018 (nr grupy laboratoryjnej)"
+- w treści wiadomości powinno znaleźć się imię i nazwisko osoby oddającej program
+- adres wysyłki wiadomości powinien być zawarty w parametrach podanych na wstępie.
+Użycie wysokopoziomowych bibliotek do wysyłki poprzez SMTP będzie skutkowało mocnym
+obniżeniem oceny za program (MAKSYMALNIE ocena DST). Podczas oddawania programu nastąpi
+pisemne sprawdzenie informacji teoretycznych dotyczących SMTP.
+
+Lab 4:
+Napisać prostego klienta FTP w dowolnym języku programowania. W przypadku użycia bibliotek
+wysokopoziomowych, najwyższa możliwa ocena za zadanie to DST.
+RFC dla FTP: http://www.ietf.org/rfc/rfc0959.txt?number=0959
+Wariant na ocenę DST:
+- program pobiera (w dowolny sposób) adres FTP serwera, port, nazwę użytkownika i hasło
+- program wyświetla wszystkie pliki i foldery obecne w głównym katalogu serwera
+- program umożliwia podanie adresu włącznie z podfolderem - wówczas wyświetla on zawartość
+tego podfolderu, a nie katalogu głównego
+Wariant na ocenę DB:
+- wszystkie podpunkty na ocenę DST
+- wymagane jest utworzenie dodatkowego (prostego) menu użytkownika służącego do nawigacji
+- program umożliwia przechodzenie do kolejnych folderów (polecenia CWD i CDUP). Po ich
+wykonaniu powinna pokazać się dodatkowo informacja, w którym miejscu użytkownik znajduje
+się w tej chwili oraz możliwość wypisania zawartości katalogu
+Wariant na ocenę BDB:
+
+- wszystkie podpunkty na ocenę DB
+- program ma w menu dodatkową opcję - rekurencyjne wyświetlenie całej zawartości serwera
+FTP (katalogi oraz pliki) w postaci drzewa. Drzewo powinno wyglądać w taki sposób, aby
+jednoznacznie pokazywało strukturę katalogów. Przy każdym rekurencyjnym zapytaniu warto
+odczekać chwilę (ok 0.5 sekundy), aby nie "przeciążyć" serwera FTP zbyt dużą ilością
+zapytań.
+Zgodnie z KRK, na zadanie poświęcone są 4 godziny laboratoryjne, czyli 2 pełne zajęcia.
+
+Lab 5:
+Napisać program typu "crawler HTTP" w dowolnym języku programowania. W przypadku użycia
+bibliotek wysokopoziomowych, najwyższa możliwa ocena za zadanie to DST.
+RFC: https://tools.ietf.org/html/rfc2616 Proszę nie czytać całego dokumentu,
+a przede wszystkim zapoznać się z poleceniem GET.
+Program powinien pobrać adres www oraz głębokość przeszukwiania (przekazanie w dowolny
+sposób), wejść na podaną stronę i pobrać ze strony i podstron (do podanej głębokości
+włącznie) wszystkie elementy:
+- DOM typu <IMG>
+- DOM typu <A> do stron, które kończą się na .html lub .htm
+- DOM typu <A> będące odnośnikami mailowymi
+- adresy email, które nie są zamieszczone w elemencie <A>
+Program powinien rekurencyjnie utworzyć drzewo strony (wraz z podstronami) i zapisać je do
+wynikowego pliku XML wg schematu:
+- korzeń pliku XML - węzeł SITE z atrybutem url zawierającym adres strony oraz depth
+zawierającym głębokość
+- węzły <IMAGE> zawierające nazwę i rozszerzenia obrazków (png, bmp, jpg, jpeg, gif)
+- węzły <EMAIL> zawierające adresy email zebrane przez crawlera
+- węzły <FILE> dla elementów <A> i prowadzące do stron .html lub .htm. Węzły <FILE>
+powinny być rekurencyjnie uzupełniane wg tego samego schematu.
+Parsowanie powinno odbywać się metodą top-down.
+Uwaga!
+* Aby działanie programu nie zostało uznane za próbę ataku DoS, należy wysyłać kolejne
+zapytania nie częściej, niż raz na sekundę.
+* Program powinien być zabezpieczony przed pętlą dla przypadku, w którym link prowadzi do
+już raz odwiedzonej strony - przykładowym rozwiązaniem może być lista już odwiedzonych
+stron. W takim przypadku należy utworzyć węzeł <FILE /> z atrybutem href, ale już bez
+rekurencyjnego przeszukwiania tego odnośnika.
+* Program powinien honorować przekazaną jako parametr głębokość przeszukwiań, czyli ilość
+poddrzew, jaka ma zostać utworzona - w dalsze odnośniki typu <A> program nie powinien już
+wchodzić, a jedynie dodać węzeł <FILE /> z atrybutem href.
+Przykładowe drzewo wynikowe wraz z moimi komentarzami:
+<?xml version="1.0" encoding="utf-8" ?>
+<SITE url="http://www.zut.edu.pl/index.html" depth="3"> <!-- strona główna jest
+na depth=1, więc przeszukujemy -->
+<IMAGE>logo.png</IMAGE>
+<EMAIL>jkowalski@zut.edu.pl</EMAIL>
+<EMAIL>jkochanowski@zut.edu.pl</EMAIL>
+<FILE href="nested_page.html"> <!-- depth=2, więc przeszukujemy rekurencyjnie -->
+<IMAGE>picture.png</IMAGE>
+<IMAGE>picture2.png</IMAGE>
+<FILE href="even_more_nested_page.html"> <!-- depth=3, więc przeszukujemy
+rekurencyjnie -->
+
+<EMAIL>jkowalski@zut.edu.pl</EMAIL>
+<FILE href="index.html" /> <!-- strona już raz odwiedzona, więc
+nie jest dalej przeszukiwana -->
+<FILE href="contact.html"> <!-- strona jest na depth=4, więc nie
+jest dalej przeszukiwana -->
+<IMAGE>logo.png</IMAGE>
+</FILE>
+</FILE>
+<!-- i tak dalej do końca -->
+</SITE>
+Do testów można wykorzystać nieoficjalną stronę Katedry Inżynierii Oprogramowania
+(http://detox.wi.ps.pl/).
