@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace zad3_smtp
 {
@@ -21,23 +22,23 @@ namespace zad3_smtp
     /// </summary>
     public partial class MainWindow : Window
     {
-        string _to, _sub, _msg, _username, _password;
+        public static MainWindow AppWindow;
+        private string _to, _sub, _msg, _from, _server, _username, _password;
+        int _port;
         public MainWindow()
         {
             InitializeComponent();
+            AppWindow = this;
         }
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             SwitchGUI();
+            GetConnectionData();
             GetValues();
-            SendMsg();
+            SMTP smtp = new SMTP(_server, _port);
+            smtp.Send(_to, _sub, _msg, _from, _username, _password);
             SwitchGUI();
-        }
-
-        private void SendMsg()
-        {
-            
         }
 
         private void GetValues()
@@ -45,16 +46,18 @@ namespace zad3_smtp
             _to = ToTextbox.Text;
             _sub = SubjectTextbox.Text;
             _msg = MessageTextbox.Text;
-            _username = UsernameTextbox.Text;
-            _password = Passwordbox.Password;
         }
 
-        private void SetStatus(bool status, string err="")
+        public void SetStatus(byte status, string err="")
         {
-            if (status)
+            if (status == 1)
             {
                 StatusLabel.Content = "Successfully sent";
                 StatusLabel.Foreground = new SolidColorBrush(Color.FromRgb(0, 190, 0));
+            }
+            else if (status == 2)
+            {
+                StatusLabel.Content = "";
             }
             else
             {
@@ -81,6 +84,17 @@ namespace zad3_smtp
                 SubjectTextbox.IsEnabled = true;
                 MessageTextbox.IsEnabled = true;
             }
+        }
+
+        private void GetConnectionData()
+        {
+            XmlDocument config = new XmlDocument();
+            config.Load("App.config");
+            _server = config.DocumentElement.SelectSingleNode("/ConnectionData/Server").InnerText;
+            _from = config.DocumentElement.SelectSingleNode("/ConnectionData/email_from").InnerText;
+            _port = Convert.ToInt32(config.DocumentElement.SelectSingleNode("/ConnectionData/Port").InnerText);
+            _password = config.DocumentElement.SelectSingleNode("/ConnectionData/Password").InnerText;
+            _username = config.DocumentElement.SelectSingleNode("/ConnectionData/Username").InnerText;
         }
     }
 }
