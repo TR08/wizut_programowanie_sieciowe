@@ -1,0 +1,37 @@
+Lab 2:
+Zaimplementować prostego klienta POP3.
+Dopuszczalne jest jedynie wykorzystanie podstawowych klas i metod do obsługi gniazd, nie
+wolno korzystać z klas "opakowujących", wyspecjalizowanych do obsługi POP3.
+Do programu powinien być dołączony plik App.config. Z tego pliku program będzie pobierał
+dane wymagane do działania, czyli:
+- adres serwera
+- nazwę użytkownika
+- hasło
+- port (domyślna wartość dla POP3: port 110)
+- czas [s] co ile sprawdzana ma być poczta
+UWAGA, dygresja - proszę o zachowanie ostrożności i nie wpisywanie do pliku haseł do
+"wrażliwych" maili (prywatnych lub uczelnianego). Warto na potrzeby zadania utworzyć
+specjalnego maila, którego potencjalna strata nie będzie bolesna. Odradzam konto na gmail
+(bywa kłopotliwe podczas niskopoziomowych operacji SMTP/POP3), zamiast tego lepiej
+utworzyć konto na lokalnych portalach: poczta.onet.pl, poczta.wp.pl, poczta.o2.pl.
+Sposób przechowywania danych w pliku konfiguracyjnym jest dowolny
+(XML/plaintext/jakikolwiek inny), ale powinien on pozwalać na łatwą modyfikację danych.
+
+Po uruchomieniu, program powinien:
+* pobrać dane z pliku konfiguracyjnego
+* nawiązać połączenie z serwerem poprzez gniazdo i się uwierzytelnić
+* co X sekund (wartość określona w pliku .config) program poiwnien łączyć się z serwerem i
+sprawdzać, czy pojawiła się nowa wiadomość
+* w przypadku pojawienia się nowej wiadomości (od czasu ostatniego sprawdzenia), program
+powinien to zasygnalizować - pokazać jej tytuł, albo przynajmniej poinformować o nowej
+wiadomości
+* program powinien pozwolić na zakończenie połączenia (np. poprzez wpisanie znaku 'q').
+Program powinien wówczas zamknąć gniazda i poinformować, ile maili łącznie zostało
+odebranych od czasu uruchomienia.
+* program powinien mieć zaimplementowany mechanizm UIDL (Unique Id Listing) w celu
+uniknięcia fałszywego wykrywania każdorazowo tych samych wiadomości.
+Szczegółowy RFC dla POP3: https://www.ietf.org/rfc/rfc1939.txt?number=1939
+Wymagane będą głównie polecenia USER, PASS, UIDL, QUIT
+Proszę o ostrożność w kwestii haseł oraz o pilnowanie, aby przesadnie nie "spamować"
+serwera pocztowego (wysyłanie polecenia LIST co 2 milisekundy może zostać przez serwer
+odebrane jako atak). Rozsądne jest odpytywanie serwera co 5-10 sekund.

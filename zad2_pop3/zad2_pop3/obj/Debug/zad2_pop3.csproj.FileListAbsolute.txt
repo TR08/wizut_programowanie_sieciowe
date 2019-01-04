@@ -1,0 +1,15 @@
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\bin\Debug\zad2_pop3.exe.config
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\bin\Debug\zad2_pop3.exe
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\bin\Debug\zad2_pop3.pdb
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\zad2_pop3.csprojResolveAssemblyReference.cache
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\MainWindow.g.cs
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\App.g.cs
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\zad2_pop3_MarkupCompile.cache
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\zad2_pop3_MarkupCompile.lref
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\MainWindow.baml
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\zad2_pop3.g.resources
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\zad2_pop3.Properties.Resources.resources
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\zad2_pop3.csproj.GenerateResource.Cache
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\zad2_pop3.csproj.CoreCompileInputs.cache
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\zad2_pop3.exe
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad2_pop3\zad2_pop3\obj\Debug\zad2_pop3.pdb
