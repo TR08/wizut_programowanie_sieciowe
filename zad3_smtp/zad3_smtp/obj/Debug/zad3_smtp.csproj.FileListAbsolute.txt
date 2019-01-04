@@ -1,0 +1,15 @@
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\bin\Debug\zad3_smtp.exe.config
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\bin\Debug\zad3_smtp.exe
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\bin\Debug\zad3_smtp.pdb
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\zad3_smtp.csprojResolveAssemblyReference.cache
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\MainWindow.g.cs
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\App.g.cs
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\zad3_smtp_MarkupCompile.cache
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\zad3_smtp_MarkupCompile.lref
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\MainWindow.baml
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\zad3_smtp.g.resources
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\zad3_smtp.Properties.Resources.resources
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\zad3_smtp.csproj.GenerateResource.Cache
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\zad3_smtp.csproj.CoreCompileInputs.cache
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\zad3_smtp.exe
+D:\Programowanie\Programy\wizut_programowanie_sieciowe\zad3_smtp\zad3_smtp\obj\Debug\zad3_smtp.pdb
