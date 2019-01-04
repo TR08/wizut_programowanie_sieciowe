@@ -51,6 +51,7 @@ namespace zad2_pop3
 
         private bool ValidateResponse(string rsp, string check, string status="Could not connect")
         {
+            if (rsp == "" && check != "") return false;
             if (rsp.Substring(0, 3) != check)
             {
                 MainWindow.AppWindow.UpdateStatus(status);
@@ -96,6 +97,7 @@ namespace zad2_pop3
         {
             List<MailHeader> curEmails = MainWindow.AppWindow.GetCurrentEmailsList();
             List<MailHeader> emails = new List<MailHeader>();
+            List<MailHeader> newEmails = new List<MailHeader>();
             string msg = "UIDL\r\n", rsp;
             Write(msg);
             rsp = Read();
@@ -131,11 +133,45 @@ namespace zad2_pop3
                         break;
                     }
                 }
-                if (add) curEmails.Add(emails[i]);
+                if (add) newEmails.Add(emails[i]);
             }
-            return curEmails;
+            return newEmails;
         }
 
+        public List<MailHeader> Retr(List<MailHeader> emails)
+        {
+            string msg, rsp;
+            for (int i=0; i<emails.Count; ++i)
+            {
+                msg = "RETR " + emails[i].number + "\r\n";
+                Write(msg);
+                rsp = Read();
+                if (!ValidateResponse(rsp, "+OK", "Could not disconnect")) continue;
+                while (true)
+                {
+                    rsp = Read();
+                    if (rsp == ".") break;
+                    else
+                    {
+                        //Subject: Witaj w WP Poczcie!
+                        if (rsp.Contains("Subject: "))
+                        {
+                            int start = rsp.IndexOf("Subject: ") + 9;
+                            emails[i].title += DecodeQuotedPrintable(rsp.Substring(start));
+                        }
+                    }
+                }
+                emails[i].retrieved = true;
+            }
+            return emails;
+        }
 
+        private string DecodeQuotedPrintable(string encoded)
+        {
+            // jedyne użycie złożonej biblioteki do maili
+            // dekodowanie przychodzących tytułów nie było przedmiotem zadania
+            System.Net.Mail.Attachment attachment = System.Net.Mail.Attachment.CreateAttachmentFromString("", encoded);
+            return attachment.Name;
+        }
     }
 }

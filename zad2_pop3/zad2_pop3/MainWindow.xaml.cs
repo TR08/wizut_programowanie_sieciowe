@@ -27,7 +27,8 @@ namespace zad2_pop3
         private bool _connected = false;
         private POP3 _pop3;
         private List<MailHeader> _emails = new List<MailHeader>();
-        private string _lastEmailUID = "";
+        //private string _lastEmailUID = "";
+        int _counterTotal = 0, _counter = 0;
 
         public MainWindow()
         {
@@ -56,6 +57,9 @@ namespace zad2_pop3
                 _connected = true;
                 ConnectionButton.Content = "Disconnect";
                 RefreshButton.IsEnabled = true;
+                AutoRefreshCheckbox.IsEnabled = true;
+                AutoRefreshCheckbox.IsChecked = true;
+                _counter = 0;
             }
             else
             {
@@ -63,6 +67,8 @@ namespace zad2_pop3
                 ConnectionButton.Content = "Connect";
                 _connected = false;
                 RefreshButton.IsEnabled = false;
+                AutoRefreshCheckbox.IsChecked = false;
+                AutoRefreshCheckbox.IsEnabled = false;
             }
         }
 
@@ -73,31 +79,130 @@ namespace zad2_pop3
 
         private void RefreshButtonClicked(object sender, RoutedEventArgs e)
         {
+            SwitchConnectionButton();
             _pop3.Disconnect(true);
             _pop3 = new POP3();
             _pop3.Connect(_server, _port, _username, _password, true);
-            _emails = _pop3.UIDL();
-            for (int i=_emails.Count-1; i>=0; i--)
+            List < MailHeader > newEmails = _pop3.UIDL();
+            _pop3.Retr(newEmails);
+            SwitchConnectionButton();
+
+            for (int i=0; i < newEmails.Count; i++)
             {
-                if (_emails[i].uid != _lastEmailUID) DisplayEmail(_emails[i].number + " " + _emails[i].uid);
-                else break;
+                DisplayEmail(newEmails[i].number + " " + newEmails[i].title);
             }
-            _lastEmailUID = _emails[_emails.Count - 1].uid;
+            //if (newEmails.Count > 0) _lastEmailUID = newEmails[newEmails.Count - 1].uid;
+            if (_emails.Count != 0) _counter += newEmails.Count;
+            _counterTotal += newEmails.Count;
+            _emails = _emails.Concat(newEmails).ToList<MailHeader>();
+            UpdateCounters(_counterTotal + "/" + _counter);
+        }
+
+        private void SwitchConnectionButton()
+        {
+            if (ConnectionButton.Dispatcher.CheckAccess())
+            {
+                if (ConnectionButton.IsEnabled)
+                {
+                    ConnectionButton.Content = "Updating";
+                    ConnectionButton.IsEnabled = false;
+                }
+                else
+                {
+                    ConnectionButton.Content = "Disconnect";
+                    ConnectionButton.IsEnabled = true;
+                }
+            }
+            else
+            {
+                ConnectionButton.Dispatcher.Invoke(
+                    System.Windows.Threading.DispatcherPriority.Normal,
+                    new ControlChecker(SwitchConnectionButton));
+            }
+        }
+
+        private void UpdateCounters(string counters)
+        {
+            if (this.CounterField.Dispatcher.CheckAccess())
+            {
+                CounterField.Text = counters;
+            }
+            else
+            {
+                this.CounterField.Dispatcher.Invoke(
+                    System.Windows.Threading.DispatcherPriority.Normal,
+                    new TBXTextChanger(this.UpdateCounters), counters);
+            }
         }
 
         public void DisplayEmail(string title)
         {
-            EmailsList.Text += title + "\n";
+            if (this.EmailsList.Dispatcher.CheckAccess())
+            {
+                string old = EmailsList.Text;
+                EmailsList.Text = title + "\n" + old;
+            }
+            else
+            {
+                this.EmailsList.Dispatcher.Invoke(
+                    System.Windows.Threading.DispatcherPriority.Normal,
+                    new TBXTextChanger(this.DisplayEmail), title);
+            }
         }
 
         public void UpdateStatus(string status)
         {
-            StatusLabel.Content = status;
+            if (this.StatusLabel.Dispatcher.CheckAccess())
+            {
+                StatusLabel.Content = status;
+            }
+            else
+            {
+                this.StatusLabel.Dispatcher.Invoke(
+                    System.Windows.Threading.DispatcherPriority.Normal,
+                    new TBXTextChanger(this.UpdateStatus), status);
+            }
         }
+
+        private void AutoRefreshCheckbox_Checked(object sender, RoutedEventArgs e)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                RefreshButtonClicked(null, null);
+                System.Threading.Thread.Sleep(_interval * 1000);
+                IsAutoChecked();
+            });
+        }
+
+        private void IsAutoChecked()
+        {
+            if (this.AutoRefreshCheckbox.Dispatcher.CheckAccess())
+            {
+                if (AutoRefreshCheckbox.IsChecked == true) AutoRefreshCheckbox_Checked(null, null);
+            }
+            else
+            {
+                this.AutoRefreshCheckbox.Dispatcher.Invoke(
+                    System.Windows.Threading.DispatcherPriority.Normal,
+                    new ControlChecker(IsAutoChecked));
+            }
+        }
+
+        private delegate void TBXTextChanger(string status);
+        private delegate void ControlChecker();
 
         public void UpdateListStatus(string status)
         {
-            UpdateListLabel.Content = status;
+            if (this.UpdateListLabel.Dispatcher.CheckAccess())
+            {
+                UpdateListLabel.Content = status;
+            }
+            else
+            {
+                this.UpdateListLabel.Dispatcher.Invoke(
+                    System.Windows.Threading.DispatcherPriority.Normal,
+                    new TBXTextChanger(this.UpdateListStatus), status);
+            }
         }
 
         public void ClearEmailsList()

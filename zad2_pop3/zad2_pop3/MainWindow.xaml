@@ -7,12 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Button x:Name="ConnectionButton" Content="Connect" HorizontalAlignment="Left" Margin="432,10,0,0" VerticalAlignment="Top" Width="75" Click="ConnectionButtonClicked"/>
-        <TextBox x:Name="EmailsList" HorizontalAlignment="Left" Height="244" Margin="10,66,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="497"/>
+        <Button x:Name="ConnectionButton" Content="Connect" HorizontalAlignment="Right" Margin="10,10,10,0" VerticalAlignment="Top" Width="75" Click="ConnectionButtonClicked"/>
+        <TextBox x:Name="EmailsList" HorizontalAlignment="Left" Margin="10,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="true" BorderThickness="0"/>
         <Label x:Name="StatusLabel" Content="Not connected" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="ClearButton" Content="Clear" HorizontalAlignment="Left" Margin="432,37,0,0" VerticalAlignment="Top" Width="75" Click="ClearButtonClicked"/>
-        <Button x:Name="RefreshButton" Content="Refresh" HorizontalAlignment="Left" Margin="352,37,0,0" VerticalAlignment="Top" Width="75" Click="RefreshButtonClicked" IsEnabled="False"/>
+        <Button x:Name="ClearButton" Content="Clear" HorizontalAlignment="Right" Margin="10,37,10,0" VerticalAlignment="Top" Width="75" Click="ClearButtonClicked"/>
+        <Button x:Name="RefreshButton" Content="Refresh" HorizontalAlignment="Right" Margin="10,37,90,0" VerticalAlignment="Top" Width="75" Click="RefreshButtonClicked" IsEnabled="False"/>
         <Label x:Name="UpdateListLabel" Content="" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="AutoRefreshCheckbox" Content="Auto Refresh" HorizontalAlignment="Left" Margin="255,40,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" Checked="AutoRefreshCheckbox_Checked" IsEnabled="False"/>
+        <Label Content="Messages received (total/per connection):" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="CounterField" HorizontalAlignment="Left" Height="23" Margin="243,68,0,0" TextWrapping="Wrap" Text="0/0" VerticalAlignment="Top" Width="120" IsReadOnly="true" BorderThickness="0"/>
 
     </Grid>
 </Window>

@@ -11,6 +11,6 @@ namespace zad2_pop3
         public long number;
         public string uid;
         public bool retrieved = false;
-        public string message;
+        public string title;
     }
 }
