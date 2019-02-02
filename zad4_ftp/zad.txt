@@ -1,0 +1,24 @@
+Lab 4:
+Napisaæ prostego klienta FTP w dowolnym jêzyku programowania. W przypadku u¿ycia bibliotek
+wysokopoziomowych, najwy¿sza mo¿liwa ocena za zadanie to DST.
+RFC dla FTP: http://www.ietf.org/rfc/rfc0959.txt?number=0959
+Wariant na ocenê DST:
+- program pobiera (w dowolny sposób) adres FTP serwera, port, nazwê u¿ytkownika i has³o
+- program wyœwietla wszystkie pliki i foldery obecne w g³ównym katalogu serwera
+- program umo¿liwia podanie adresu w³¹cznie z podfolderem - wówczas wyœwietla on zawartoœæ
+tego podfolderu, a nie katalogu g³ównego
+Wariant na ocenê DB:
+- wszystkie podpunkty na ocenê DST
+- wymagane jest utworzenie dodatkowego (prostego) menu u¿ytkownika s³u¿¹cego do nawigacji
+- program umo¿liwia przechodzenie do kolejnych folderów (polecenia CWD i CDUP). Po ich
+wykonaniu powinna pokazaæ siê dodatkowo informacja, w którym miejscu u¿ytkownik znajduje
+siê w tej chwili oraz mo¿liwoœæ wypisania zawartoœci katalogu
+Wariant na ocenê BDB:
+
+- wszystkie podpunkty na ocenê DB
+- program ma w menu dodatkow¹ opcjê - rekurencyjne wyœwietlenie ca³ej zawartoœci serwera
+FTP (katalogi oraz pliki) w postaci drzewa. Drzewo powinno wygl¹daæ w taki sposób, aby
+jednoznacznie pokazywa³o strukturê katalogów. Przy ka¿dym rekurencyjnym zapytaniu warto
+odczekaæ chwilê (ok 0.5 sekundy), aby nie "przeci¹¿yæ" serwera FTP zbyt du¿¹ iloœci¹
+zapytañ.
+Zgodnie z KRK, na zadanie poœwiêcone s¹ 4 godziny laboratoryjne, czyli 2 pe³ne zajêcia.
