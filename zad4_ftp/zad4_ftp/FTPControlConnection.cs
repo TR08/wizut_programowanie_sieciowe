@@ -70,5 +70,15 @@ namespace zad4_ftp
         {
             if (!WriteAndRead("MLSD " + path + "\r\n", "150")) return;
         }
+
+        public void MakeCurrentDir(string path)
+        {
+            if (!WriteAndRead("CWD " + path + "\r\n", "250")) return;
+        }
+
+        public void MakeParentAsCurrent()
+        {
+            if (!WriteAndRead("CWD\r\n", "250")) return;
+        }
     }
 }

@@ -117,9 +117,10 @@ namespace zad4_ftp
         private void Go()
         {
             if (!PrepareConnection()) return;
-            FillFTPList();
+            bool refTree = FillFTPList();
             FTPControl.Quit();
             FTPData.Quit();
+            if (refTree) RefreshFTPTree();
         }
 
         private bool IsRawFTP()
@@ -130,8 +131,9 @@ namespace zad4_ftp
             return true;
         }
 
-        private void FillFTPList()
+        private bool FillFTPList()
         {
+            FTPControl.MakeCurrentDir(_path);
             if (_isRaw) FTPControl.ListOfNames(_path);
             else FTPControl.ListAdvanced(_path);
             var RecivedData = FTPData.GetList();
@@ -141,10 +143,11 @@ namespace zad4_ftp
                 SetStatus(0, "This is not a directory");
                 _path = _oldPath;
                 FTPPath.Text = _oldPath;
-                return;
+                return false;
             }
             FTPList.Items.Clear();
             AddDataToListView(RecivedData);
+            return true;
         }
 
         private void AddColumnsForMLSD()
@@ -219,6 +222,87 @@ namespace zad4_ftp
             Go();
         }
 
+        private void RefreshFTPTree()
+        {
+            FTPTree.Items.Clear();
+            bool isLast = false;
+            string tempPath = _path;
+            if (tempPath == "/") isLast = true;
+            if (!PrepareConnection()) return;
+            TreeViewItem TreeNode = null;
+            string parent = "";
+            do
+            {
+                FTPControl.ListOfNames(tempPath);
+                var RecivedData = FTPData.GetList();
+                //StatusLabel.Content = "\n" + RecivedData;
+                FTPControl.Quit();
+                FTPData.Quit();
+                var nodes = RecivedData.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                TreeNode = BuildTreeNode(nodes, TreeNode, parent);
+                if (isLast) break;
+                if (!PrepareConnection()) return;
+                var parentTemp = tempPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parentTemp.Length > 0) parent = parentTemp[parentTemp.Length - 1];
+                else parent = "/";
+                FTPControl.MakeParentAsCurrent();
+                var temp1 = tempPath.Substring(0, tempPath.LastIndexOf('/'));
+                var temp2 = temp1.Substring(0, temp1.LastIndexOf('/') + 1);
+                tempPath = temp2;
+                if (tempPath == "/") isLast = true;
+                System.Threading.Thread.Sleep(500);
+            } while (true);
+            TreeNode.Header = "/";
+            FTPTree.Items.Add(TreeNode);
+        }
+
+        private TreeViewItem BuildTreeNode(string[] nodes, TreeViewItem subTree = null, string parentOfSubName = "")
+        {
+            TreeViewItem parent = new TreeViewItem();
+            for (int i = 2; i < nodes.Length; ++i)
+            {
+                TreeViewItem node = new TreeViewItem
+                {
+                    Header = nodes[i],
+                    IsExpanded = true
+                };
+                parent.Items.Add(node);
+                if (subTree != null && nodes[i] == parentOfSubName)
+                {
+                    subTree.Header = parentOfSubName;
+                    subTree.MouseDoubleClick += FTPTreeItem_MouseDoubleClick;
+                    parent.Items[i - 2] = subTree;
+                }
+            }
+            parent.IsExpanded = true;
+            parent.MouseDoubleClick += FTPTreeItem_MouseDoubleClick;
+            return parent;
+        }
+
+        private void FTPTreeOnItemSelected(object sender, RoutedEventArgs e)
+        {
+            FTPTree.Tag = e.OriginalSource;
+        }
+
+        void FTPTreeItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (FTPTree.SelectedItem != null)
+            {
+                TreeViewItem selectedTVI = FTPTree.Tag as TreeViewItem;
+                string path = selectedTVI.Header.ToString();
+                if (path != "/") path += "/";
+                while (!selectedTVI.Parent.GetType().IsInstanceOfType(new TreeView()))
+                {
+                    var parentName = ((TreeViewItem)selectedTVI.Parent).Header.ToString();
+                    if (parentName == "/") parentName = "";
+                    path = parentName + "/" + path;
+                    selectedTVI = (TreeViewItem)selectedTVI.Parent;
+                }
+                FTPPath.Text = path;
+                GoToCustom();
+            }
+        }
+
         private void GetConnectionData()
         {
             XmlDocument config = new XmlDocument();
@@ -241,7 +325,7 @@ namespace zad4_ftp
             }
             else
             {
-                StatusLabel.Content = "\nError: " + err;
+                StatusLabel.Content = "Error: " + err;
                 StatusLabel.Foreground = new SolidColorBrush(Color.FromRgb(210, 0, 0));
             }
         }
