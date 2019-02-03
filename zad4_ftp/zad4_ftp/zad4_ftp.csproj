@@ -66,6 +66,7 @@
     <Compile Include="FTP.cs" />
     <Compile Include="FTPControlConnection.cs" />
     <Compile Include="FTPDataConnection.cs" />
+    <Compile Include="FTPListItem.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace zad4_ftp
 {
-    public class FTP : System.Net.Sockets.TcpClient
+    public class FTP : TcpClient
     {
         protected string _server;//, _user, _pass;
         protected int _port;
@@ -59,8 +59,22 @@ namespace zad4_ftp
                 MainWindow.AppWindow.SetStatus(0, rsp);
                 return false;
             }
-            MainWindow.AppWindow.SetStatus(0, rsp);
+            MainWindow.AppWindow.SetStatus(1, rsp);
             return true;
+        }
+
+        public string Help()
+        {
+            string rsp, msg;
+            msg = "HELP\r\n";
+            Write(msg);
+            rsp = Read();
+            return rsp;
+        }
+
+        public void Quit()
+        {
+            Write("QUIT\r\n");
         }
     }
 }

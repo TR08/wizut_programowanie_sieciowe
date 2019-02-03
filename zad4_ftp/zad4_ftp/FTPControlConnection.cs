@@ -60,5 +60,15 @@ namespace zad4_ftp
         {
             if (!WriteAndRead("LIST " + path + "\r\n", "150")) return;
         }
+
+        public void ListOfNames(string path = "/")
+        {
+            if (!WriteAndRead("NLST " + path + "\r\n", "150")) return;
+        }
+
+        public void ListAdvanced(string path = "/")
+        {
+            if (!WriteAndRead("MLSD " + path + "\r\n", "150")) return;
+        }
     }
 }
